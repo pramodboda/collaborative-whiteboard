@@ -40,5 +40,9 @@ export const registerWhiteboardSocket = (io: Server) => {
     //     ...data,
     //   });
     // });
+
+    socket.on("disconnect", () => {
+      console.log("disconnected", socket.id);
+    });
   });
 };

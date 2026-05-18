@@ -159,9 +159,9 @@ const Whiteboard = () => {
       addElement(element);
     });
 
-    socket.on("cursor-move", (cursor) => {
-      updateCursor(cursor);
-    });
+    // socket.on("cursor-move", (cursor) => {
+    //   updateCursor(cursor);
+    // });
 
     return () => {
       socket.off("draw");
@@ -212,19 +212,19 @@ const Whiteboard = () => {
     }
   };
 
-  const emitCursor = throttle((x: number, y: number) => {
-    socket.emit("cursor-move", {
-      roomId,
-      x,
-      y,
-      color,
-    });
-  }, 20);
+  // const emitCursor = throttle((x: number, y: number) => {
+  //   socket.emit("cursor-move", {
+  //     roomId,
+  //     x,
+  //     y,
+  //     color,
+  //   });
+  // }, 20);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const point = getPoint(e);
 
-    emitCursor(point.x, point.y);
+    // emitCursor(point.x, point.y);
 
     if (!drawing || !currentElement) return;
 
