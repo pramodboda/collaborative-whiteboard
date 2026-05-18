@@ -1,40 +1,4 @@
-// import { useBoardStore } from "../store/boardStore";
-
-// interface Props {
-//   onClear: () => void;
-// }
-
-// const Toolbar = ({ onClear }: Props) => {
-//   const { color, size, setColor, setSize } = useBoardStore();
-
-//   return (
-//     <div
-//       style={{
-//         display: "flex",
-//         gap: 10,
-//         padding: 10,
-//       }}
-//     >
-//       <input
-//         type="color"
-//         value={color}
-//         onChange={(e) => setColor(e.target.value)}
-//       />
-
-//       <input
-//         type="range"
-//         min={1}
-//         max={20}
-//         value={size}
-//         onChange={(e) => setSize(Number(e.target.value))}
-//       />
-
-//       <button onClick={onClear}>Clear</button>
-//     </div>
-//   );
-// };
-
-// export default Toolbar;
+// Toolbar.tsx
 
 import { socket } from "../hooks/useSocket";
 import { useBoardStore } from "../store/boardStore";
@@ -75,8 +39,9 @@ const Toolbar = () => {
       element: restored,
     });
   };
-  const handleClear = () => {
+  const handleClearBoard = () => {
     clearBoard();
+    socket.emit("clear-board", roomId);
   };
 
   return (
@@ -117,7 +82,7 @@ const Toolbar = () => {
       <button onClick={handleUndo}>Undo</button>
 
       <button onClick={handleRedo}>Redo</button>
-      <button onClick={handleClear}>Clear</button>
+      <button onClick={handleClearBoard}>Clear</button>
 
       <div>{tool}</div>
     </div>

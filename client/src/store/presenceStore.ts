@@ -1,28 +1,28 @@
-import { create } from "zustand";
-import type { Cursor } from "../types/presence";
+// import { create } from "zustand";
+// import type { Cursor } from "../types/presence";
 
-interface PresenceState {
-  cursors: Cursor[];
+// interface PresenceState {
+//   cursors: Cursor[];
 
-  updateCursor: (cursor: Cursor) => void;
-}
+//   updateCursor: (cursor: Cursor) => void;
+// }
 
-export const usePresenceStore = create<PresenceState>((set, get) => ({
-  cursors: [],
+// export const usePresenceStore = create<PresenceState>((set, get) => ({
+//   cursors: [],
 
-  updateCursor: (cursor) => {
-    const existing = get().cursors;
+//   updateCursor: (cursor) => {
+//     const existing = get().cursors;
 
-    const found = existing.find((c) => c.userId === cursor.userId);
+//     const found = existing.find((c) => c.userId === cursor.userId);
 
-    if (found) {
-      set({
-        cursors: existing.map((c) => (c.userId === cursor.userId ? cursor : c)),
-      });
-    } else {
-      set({
-        cursors: [...existing, cursor],
-      });
-    }
-  },
-}));
+//     if (found) {
+//       set({
+//         cursors: existing.map((c) => (c.userId === cursor.userId ? cursor : c)),
+//       });
+//     } else {
+//       set({
+//         cursors: [...existing, cursor],
+//       });
+//     }
+//   },
+// }));

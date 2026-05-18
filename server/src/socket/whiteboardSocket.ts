@@ -30,8 +30,7 @@ export const registerWhiteboardSocket = (io: Server) => {
 
     socket.on("clear-board", (roomId: string) => {
       clearBoard(roomId);
-
-      io.to(roomId).emit("clear-board");
+      socket.to(roomId).emit("clear-board");
     });
 
     // socket.on("cursor-move", (data) => {
