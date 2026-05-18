@@ -5,7 +5,7 @@
 
 import Whiteboard from "./components/Whiteboard";
 import Toolbar from "./components/Toolbar";
-import CursorLayer from "./components/CursorLayer";
+// import CursorLayer from "./components/CursorLayer";
 
 // import { socket } from "./hooks/useSocket";
 
@@ -135,7 +135,7 @@ function App() {
 
         <Toolbar />
 
-        <CursorLayer />
+        {/* <CursorLayer /> */}
 
         <Whiteboard />
       </div>

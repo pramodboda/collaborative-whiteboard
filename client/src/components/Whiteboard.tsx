@@ -124,7 +124,7 @@ import { socket } from "../hooks/useSocket";
 import type { BoardElement, Stroke } from "../types/drawing";
 
 import { useBoardStore } from "../store/boardStore";
-import { usePresenceStore } from "../store/presenceStore";
+// import { usePresenceStore } from "../store/presenceStore";
 
 import { redrawCanvas } from "../canvas/redrawCanvas";
 
@@ -136,7 +136,7 @@ const Whiteboard = () => {
   const { elements, addElement, removeElement, color, size, tool } =
     useBoardStore();
 
-  const updateCursor = usePresenceStore((state) => state.updateCursor);
+  // const updateCursor = usePresenceStore((state) => state.updateCursor);
 
   const [drawing, setDrawing] = useState(false);
 

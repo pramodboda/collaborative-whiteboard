@@ -16,3 +16,7 @@ export const removeElement = (roomId: string, elementId: string) => {
     elements.filter((e) => e.id !== elementId),
   );
 };
+
+export const clearBoard = (roomId: string) => {
+  roomBoards.set(roomId, []);
+};

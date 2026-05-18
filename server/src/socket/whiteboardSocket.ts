@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 
-import { removeElement, saveElement } from "../rooms/roomManager";
+import { removeElement, saveElement, clearBoard } from "../rooms/roomManager";
 
 export const registerWhiteboardSocket = (io: Server) => {
   io.on("connection", (socket: Socket) => {
@@ -28,11 +28,17 @@ export const registerWhiteboardSocket = (io: Server) => {
       socket.to(roomId).emit("redo", element);
     });
 
-    socket.on("cursor-move", (data) => {
-      socket.to(data.roomId).emit("cursor-move", {
-        userId: socket.id,
-        ...data,
-      });
+    socket.on("clear-board", (roomId: string) => {
+      clearBoard(roomId);
+
+      io.to(roomId).emit("clear-board");
     });
+
+    // socket.on("cursor-move", (data) => {
+    //   socket.to(data.roomId).emit("cursor-move", {
+    //     userId: socket.id,
+    //     ...data,
+    //   });
+    // });
   });
 };

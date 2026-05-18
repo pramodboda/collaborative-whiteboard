@@ -42,8 +42,17 @@ import { useBoardStore } from "../store/boardStore";
 const roomId = "room-1";
 
 const Toolbar = () => {
-  const { color, size, tool, setColor, setSize, setTool, undo, redo } =
-    useBoardStore();
+  const {
+    color,
+    size,
+    tool,
+    setColor,
+    setSize,
+    setTool,
+    undo,
+    redo,
+    clearBoard,
+  } = useBoardStore();
 
   const handleUndo = () => {
     const removed = undo();
@@ -66,6 +75,9 @@ const Toolbar = () => {
       element: restored,
     });
   };
+  const handleClear = () => {
+    clearBoard();
+  };
 
   return (
     <div
@@ -73,7 +85,7 @@ const Toolbar = () => {
         display: "flex",
         gap: 10,
         padding: 10,
-        position: "fixed",
+        // position: "fixed",
         top: 10,
         left: 10,
         background: "white",
@@ -105,6 +117,7 @@ const Toolbar = () => {
       <button onClick={handleUndo}>Undo</button>
 
       <button onClick={handleRedo}>Redo</button>
+      <button onClick={handleClear}>Clear</button>
 
       <div>{tool}</div>
     </div>
