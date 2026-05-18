@@ -1,3 +1,5 @@
+// Node + Socket.IO backend
+
 import express from "express";
 import http from "http";
 import cors from "cors";
