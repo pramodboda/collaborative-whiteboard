@@ -1,7 +1,8 @@
 import express from "express";
 import http from "http";
-import { Server } from "socket.io";
 import cors from "cors";
+import { Server } from "socket.io";
+
 import { registerWhiteboardSocket } from "./socket/whiteboardSocket";
 
 const app = express();

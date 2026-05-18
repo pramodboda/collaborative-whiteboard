@@ -17,76 +17,90 @@
 // }));
 
 import { create } from "zustand";
-import { Stroke } from "../types/drawing";
+import { type BoardElement } from "../types/drawing";
+import type { Tool } from "../types/shape";
 
 interface BoardState {
   color: string;
   size: number;
+  tool: Tool;
 
-  strokes: Stroke[];
-  undoneStrokes: Stroke[];
+  elements: BoardElement[];
+  undone: BoardElement[];
 
   setColor: (color: string) => void;
   setSize: (size: number) => void;
+  setTool: (tool: Tool) => void;
 
-  addStroke: (stroke: Stroke) => void;
+  addElement: (element: BoardElement) => void;
 
-  undo: () => void;
-  redo: () => void;
+  removeElement: (id: string) => void;
 
-  setStrokes: (strokes: Stroke[]) => void;
+  undo: () => BoardElement | null;
+
+  redo: () => BoardElement | null;
 
   clearBoard: () => void;
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
   color: "#000000",
-  size: 3,
+  size: 4,
+  tool: "pencil",
 
-  strokes: [],
-  undoneStrokes: [],
+  elements: [],
+  undone: [],
 
   setColor: (color) => set({ color }),
 
   setSize: (size) => set({ size }),
 
-  addStroke: (stroke) =>
+  setTool: (tool) => set({ tool }),
+
+  addElement: (element) =>
     set((state) => ({
-      strokes: [...state.strokes, stroke],
-      undoneStrokes: [],
+      elements: [...state.elements, element],
+      undone: [],
+    })),
+
+  removeElement: (id) =>
+    set((state) => ({
+      elements: state.elements.filter((e) => e.id !== id),
     })),
 
   undo: () => {
-    const strokes = [...get().strokes];
+    const elements = [...get().elements];
 
-    if (!strokes.length) return;
+    if (!elements.length) return null;
 
-    const removed = strokes.pop()!;
+    const removed = elements.pop()!;
 
     set((state) => ({
-      strokes,
-      undoneStrokes: [...state.undoneStrokes, removed],
+      elements,
+      undone: [...state.undone, removed],
     }));
+
+    return removed;
   },
 
   redo: () => {
-    const undone = [...get().undoneStrokes];
+    const undone = [...get().undone];
 
-    if (!undone.length) return;
+    if (!undone.length) return null;
 
     const restored = undone.pop()!;
 
     set((state) => ({
-      strokes: [...state.strokes, restored],
-      undoneStrokes: undone,
+      elements: [...state.elements, restored],
+      undone,
     }));
-  },
 
-  setStrokes: (strokes) => set({ strokes }),
+    return restored;
+  },
 
   clearBoard: () =>
     set({
-      strokes: [],
-      undoneStrokes: [],
+      elements: [],
+      undone: [],
     }),
 }));

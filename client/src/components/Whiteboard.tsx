@@ -116,100 +116,139 @@
 // export default Whiteboard;
 
 import { useEffect, useRef, useState } from "react";
+
+import throttle from "lodash.throttle";
+
+import { socket } from "../hooks/useSocket";
+
+import type { BoardElement, Stroke } from "../types/drawing";
+
 import { useBoardStore } from "../store/boardStore";
-import { Stroke } from "../types/drawing";
+import { usePresenceStore } from "../store/presenceStore";
+
+import { redrawCanvas } from "../canvas/redrawCanvas";
+
+const roomId = "room-1";
 
 const Whiteboard = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [currentStroke, setCurrentStroke] = useState<Stroke | null>(null);
+  const { elements, addElement, removeElement, color, size, tool } =
+    useBoardStore();
 
-  const { color, size, strokes, addStroke } = useBoardStore();
+  const updateCursor = usePresenceStore((state) => state.updateCursor);
+
+  const [drawing, setDrawing] = useState(false);
+
+  const [currentElement, setCurrentElement] = useState<BoardElement | null>(
+    null,
+  );
 
   useEffect(() => {
-    redrawCanvas();
-  }, [strokes, currentStroke]);
+    socket.emit("join-room", roomId);
 
-  const getContext = () => {
-    return canvasRef.current?.getContext("2d");
-  };
+    socket.on("draw", (element) => {
+      addElement(element);
+    });
 
-  const drawStroke = (stroke: Stroke) => {
-    const ctx = getContext();
+    socket.on("undo", (id) => {
+      removeElement(id);
+    });
+
+    socket.on("redo", (element) => {
+      addElement(element);
+    });
+
+    socket.on("cursor-move", (cursor) => {
+      updateCursor(cursor);
+    });
+
+    return () => {
+      socket.off("draw");
+      socket.off("undo");
+      socket.off("redo");
+      socket.off("cursor-move");
+    };
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
 
     if (!ctx) return;
 
-    ctx.strokeStyle = stroke.color;
-    ctx.lineWidth = stroke.size;
-    ctx.lineCap = "round";
+    redrawCanvas(ctx, canvas, elements);
 
-    const points = stroke.points;
-
-    if (points.length < 2) return;
-
-    ctx.beginPath();
-
-    ctx.moveTo(points[0].x, points[0].y);
-
-    for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i].x, points[i].y);
+    if (currentElement) {
+      redrawCanvas(ctx, canvas, [...elements, currentElement]);
     }
+  }, [elements, currentElement]);
 
-    ctx.stroke();
-  };
-
-  const redrawCanvas = () => {
-    const ctx = getContext();
-
-    if (!ctx || !canvasRef.current) return;
-
-    if (currentStroke) {
-      drawStroke(currentStroke);
-    }
-
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
-    strokes.forEach(drawStroke);
-  };
-
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const getPoint = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const rect = canvasRef.current!.getBoundingClientRect();
 
-    const point = {
+    return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     };
+  };
 
-    setCurrentStroke({
-      id: crypto.randomUUID(),
-      points: [point],
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    setDrawing(true);
+
+    const point = getPoint(e);
+
+    if (tool === "pencil") {
+      setCurrentElement({
+        id: crypto.randomUUID(),
+        type: "stroke",
+        points: [point],
+        color,
+        size,
+      });
+    }
+  };
+
+  const emitCursor = throttle((x: number, y: number) => {
+    socket.emit("cursor-move", {
+      roomId,
+      x,
+      y,
       color,
-      size,
     });
+  }, 20);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const point = getPoint(e);
+
+    emitCursor(point.x, point.y);
+
+    if (!drawing || !currentElement) return;
+
+    if (currentElement.type === "stroke") {
+      setCurrentElement({
+        ...currentElement,
+        points: [...currentElement.points, point],
+      } as Stroke);
+    }
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!currentStroke) return;
+  const handleMouseUp = () => {
+    if (!currentElement) return;
 
-    const rect = canvasRef.current!.getBoundingClientRect();
+    addElement(currentElement);
 
-    const point = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    };
-
-    setCurrentStroke({
-      ...currentStroke,
-      points: [...currentStroke.points, point],
+    socket.emit("draw", {
+      roomId,
+      element: currentElement,
     });
-  };
 
-  const stopDrawing = () => {
-    if (!currentStroke) return;
+    setCurrentElement(null);
 
-    addStroke(currentStroke);
-
-    setCurrentStroke(null);
+    setDrawing(false);
   };
 
   return (
@@ -218,12 +257,11 @@ const Whiteboard = () => {
       width={window.innerWidth}
       height={window.innerHeight}
       style={{
-        border: "1px solid #ccc",
+        background: "#f8f8f8",
       }}
-      onMouseDown={startDrawing}
-      onMouseMove={draw}
-      onMouseUp={stopDrawing}
-      onMouseLeave={stopDrawing}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     />
   );
 };

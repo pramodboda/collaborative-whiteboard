@@ -5,18 +5,20 @@
 
 import Whiteboard from "./components/Whiteboard";
 import Toolbar from "./components/Toolbar";
-import { socket } from "./hooks/useSocket";
+import CursorLayer from "./components/CursorLayer";
+
+// import { socket } from "./hooks/useSocket";
 
 import "./App.css";
 
-const roomId = "room-1";
+// const roomId = "room-1";
 
 function App() {
   // const [count, setCount] = useState(0);
 
-  const handleClear = () => {
-    socket.emit("clear-board", roomId);
-  };
+  // const handleClear = () => {
+  //   socket.emit("clear-board", roomId);
+  // };
 
   return (
     <>
@@ -129,7 +131,12 @@ function App() {
 
       <div>
         <h2>A Real-Time Collaborative Whiteboard</h2>
-        <Toolbar onClear={handleClear} />
+        {/* <Toolbar onClear={handleClear} /> */}
+
+        <Toolbar />
+
+        <CursorLayer />
+
         <Whiteboard />
       </div>
     </>

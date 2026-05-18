@@ -36,25 +36,36 @@
 
 // export default Toolbar;
 
+import { socket } from "../hooks/useSocket";
 import { useBoardStore } from "../store/boardStore";
 
-interface Props {
-  onClear: () => void;
-}
+const roomId = "room-1";
 
-const handleUndo = () => {
-  const removed = undo();
+const Toolbar = () => {
+  const { color, size, tool, setColor, setSize, setTool, undo, redo } =
+    useBoardStore();
 
-  if (!removed) return;
+  const handleUndo = () => {
+    const removed = undo();
 
-  socket.emit("undo", {
-    roomId,
-    strokeId: removed.id,
-  });
-};
+    if (!removed) return;
 
-const Toolbar = ({ onClear }: Props) => {
-  const { color, size, setColor, setSize, undo, redo } = useBoardStore();
+    socket.emit("undo", {
+      roomId,
+      elementId: removed.id,
+    });
+  };
+
+  const handleRedo = () => {
+    const restored = redo();
+
+    if (!restored) return;
+
+    socket.emit("redo", {
+      roomId,
+      element: restored,
+    });
+  };
 
   return (
     <div
@@ -62,8 +73,21 @@ const Toolbar = ({ onClear }: Props) => {
         display: "flex",
         gap: 10,
         padding: 10,
+        position: "fixed",
+        top: 10,
+        left: 10,
+        background: "white",
+        zIndex: 1000,
       }}
     >
+      <button onClick={() => setTool("pencil")}>Pencil</button>
+
+      <button onClick={() => setTool("rectangle")}>Rectangle</button>
+
+      <button onClick={() => setTool("circle")}>Circle</button>
+
+      <button onClick={() => setTool("line")}>Line</button>
+
       <input
         type="color"
         value={color}
@@ -80,9 +104,9 @@ const Toolbar = ({ onClear }: Props) => {
 
       <button onClick={handleUndo}>Undo</button>
 
-      <button onClick={redo}>Redo</button>
+      <button onClick={handleRedo}>Redo</button>
 
-      <button onClick={onClear}>Clear</button>
+      <div>{tool}</div>
     </div>
   );
 };

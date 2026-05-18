@@ -1,17 +1,18 @@
 const roomBoards = new Map<string, any[]>();
 
-export const saveStroke = (roomId: string, data: any) => {
+export const saveElement = (roomId: string, element: any) => {
   if (!roomBoards.has(roomId)) {
     roomBoards.set(roomId, []);
   }
 
-  roomBoards.get(roomId)?.push(data);
+  roomBoards.get(roomId)?.push(element);
 };
 
-export const getBoardData = (roomId: string) => {
-  return roomBoards.get(roomId) || [];
-};
+export const removeElement = (roomId: string, elementId: string) => {
+  const elements = roomBoards.get(roomId) || [];
 
-export const clearBoard = (roomId: string) => {
-  roomBoards.set(roomId, []);
+  roomBoards.set(
+    roomId,
+    elements.filter((e) => e.id !== elementId),
+  );
 };

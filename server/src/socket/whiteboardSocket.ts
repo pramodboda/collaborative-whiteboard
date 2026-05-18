@@ -1,40 +1,38 @@
 import { Server, Socket } from "socket.io";
-import { saveStroke, getBoardData, clearBoard } from "../rooms/roomManager";
+
+import { removeElement, saveElement } from "../rooms/roomManager";
 
 export const registerWhiteboardSocket = (io: Server) => {
   io.on("connection", (socket: Socket) => {
-    console.log("User connected:", socket.id);
+    console.log("connected", socket.id);
 
-    socket.on("join-room", (roomId: string) => {
+    socket.on("join-room", (roomId) => {
       socket.join(roomId);
-
-      const boardData = getBoardData(roomId);
-
-      socket.emit("load-board", boardData);
     });
 
-    socket.on("draw", ({ roomId, data }) => {
-      saveStroke(roomId, data);
+    socket.on("draw", ({ roomId, element }) => {
+      saveElement(roomId, element);
 
-      socket.to(roomId).emit("draw", data);
+      socket.to(roomId).emit("draw", element);
     });
 
-    socket.on("undo", ({ roomId, strokeId }) => {
-      socket.to(roomId).emit("undo", strokeId);
+    socket.on("undo", ({ roomId, elementId }) => {
+      removeElement(roomId, elementId);
+
+      socket.to(roomId).emit("undo", elementId);
     });
 
-    socket.on("redo", ({ roomId, stroke }) => {
-      socket.to(roomId).emit("redo", stroke);
+    socket.on("redo", ({ roomId, element }) => {
+      saveElement(roomId, element);
+
+      socket.to(roomId).emit("redo", element);
     });
 
-    socket.on("clear-board", (roomId: string) => {
-      clearBoard(roomId);
-
-      io.to(roomId).emit("clear-board");
-    });
-
-    socket.on("disconnect", () => {
-      console.log("User disconnected");
+    socket.on("cursor-move", (data) => {
+      socket.to(data.roomId).emit("cursor-move", {
+        userId: socket.id,
+        ...data,
+      });
     });
   });
 };
