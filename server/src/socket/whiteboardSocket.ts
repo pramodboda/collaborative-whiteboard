@@ -19,6 +19,14 @@ export const registerWhiteboardSocket = (io: Server) => {
       socket.to(roomId).emit("draw", data);
     });
 
+    socket.on("undo", ({ roomId, strokeId }) => {
+      socket.to(roomId).emit("undo", strokeId);
+    });
+
+    socket.on("redo", ({ roomId, stroke }) => {
+      socket.to(roomId).emit("redo", stroke);
+    });
+
     socket.on("clear-board", (roomId: string) => {
       clearBoard(roomId);
 
