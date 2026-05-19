@@ -198,9 +198,13 @@ const Whiteboard = () => {
     <canvas
       ref={canvasRef}
       width={window.innerWidth}
+      // width="320"
       height={window.innerHeight}
+      // height="600"
       style={{
         background: "#f8f8f8",
+        // border: "1px solid red",
+        touchAction: "none",
       }}
       // onMouseDown={handleMouseDown}
       // onMouseMove={handleMouseMove}
