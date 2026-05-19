@@ -10,6 +10,11 @@ import Slider from "@mui/material/Slider";
 import IconButton from "@mui/material/IconButton";
 
 import PaletteIcon from "@mui/icons-material/Palette";
+// import { IoSquareOutline } from "react-icons/io5";
+
+// import { GoCircle } from "react-icons/go";
+import { FaRegSquare } from "react-icons/fa6";
+import { FaRegCircle } from "react-icons/fa6";
 import { BsPen } from "react-icons/bs";
 import { LuUndo } from "react-icons/lu";
 import { LuRedo } from "react-icons/lu";
@@ -68,7 +73,7 @@ const Toolbar = () => {
           display: "flex",
           gap: 10,
           padding: 10,
-          // position: "fixed",
+          position: "fixed",
           top: 10,
           left: 10,
           background: "white",
@@ -161,11 +166,13 @@ const Toolbar = () => {
           Pen
         </Button>
         <Button aria-label="rectangle" onClick={() => setTool("rectangle")}>
-          Rectangle
+          {/* <IoSquareOutline fontSize="1.2rem" /> */}
+          <FaRegSquare fontSize="1.05rem" />
         </Button>
 
         <Button aria-label="circle" onClick={() => setTool("circle")}>
-          Circle
+          {/* <GoCircle fontSize="1.1rem" /> */}
+          <FaRegCircle fontSize="1rem" />
         </Button>
 
         <Button aria-label="line" onClick={() => setTool("line")}>

@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
-
+import Box from "@mui/material/Box";
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -37,22 +37,26 @@ export default function Hero() {
 
   return (
     <>
-      <h2>
-        A Real-Time Collaborative Whiteboard{" "}
-        <Typography variant="body2" component="span" gutterBottom>
-          By Pramod Boda
-        </Typography>
-      </h2>
-      {/* <h3>How to Test?</h3> */}
-      <Button variant="contained" onClick={handleClickOpen}>
-      How to Test?
-      </Button>
-    
-      {/* <Typography variant="h4" gutterBottom>
+      <Box sx={{ marginTop: "6rem" }}>
+        <h2>
+          A Real-Time Collaborative Whiteboard{" "}
+          <Typography variant="body2" component="span" gutterBottom>
+            By Pramod Boda
+          </Typography>
+        </h2>
+        {/* <h3>How to Test?</h3> */}
+        <Button variant="contained" onClick={handleClickOpen}>
+          How to Test?
+        </Button>
+        {/* <Typography variant="h4" gutterBottom>
         A Real-Time Collaborative Whiteboard
       </Typography> */}
 
-<Dialog
+
+      </Box>
+
+
+      <Dialog
         open={open}
         slots={{
           transition: Transition,
@@ -65,37 +69,37 @@ export default function Hero() {
         <DialogTitle>{"How to Test?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-          <Typography variant="body1">
-        <ol>
-          <li>Open the whiteboard application.</li>
-          <li>Draw something on the canvas using the pen tool.</li>
-          <li>
-            Open the same URL:{" "}
-            <Link
-              href="https://collaborative-whiteboard-nu.vercel.app/"
-              target="_blank"
-            >
-              Collaborative Whiteboard
-            </Link>
-            <ul>
-              <li>in a new browser tab</li>
-              <li>in another browser</li>
-              <li>or on different devices connected to the internet</li>
-            </ul>
-          </li>
-          <li>Start drawing from any device or tab.</li>
-          <li>
-            Watch all changes appear instantly across every connected screen in
-            real time.
-          </li>
-        </ol>
-      </Typography>
+            <Typography variant="body1">
+              <ol>
+                <li>Open the whiteboard application.</li>
+                <li>Draw something on the canvas using the pen tool.</li>
+                <li>
+                  Open the same URL:{" "}
+                  <Link
+                    href="https://collaborative-whiteboard-nu.vercel.app/"
+                    target="_blank"
+                  >
+                    Collaborative Whiteboard
+                  </Link>
+                  <ul>
+                    <li>in a new browser tab</li>
+                    <li>in another browser</li>
+                    <li>or on different devices connected to the internet</li>
+                  </ul>
+                </li>
+                <li>Start drawing from any device or tab.</li>
+                <li>
+                  Watch all changes appear instantly across every connected screen in
+                  real time.
+                </li>
+              </ol>
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog >
     </>
   );
 }

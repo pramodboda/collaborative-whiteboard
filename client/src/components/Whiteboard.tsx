@@ -78,9 +78,9 @@ const Whiteboard = () => {
   }, [elements, currentElement]);
 
   // const getPoint = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const getPoint = (
-      e: React.PointerEvent<HTMLCanvasElement>,
-    ) => {
+  const getPoint = (
+    e: React.PointerEvent<HTMLCanvasElement>,
+  ) => {
     const rect = canvasRef.current!.getBoundingClientRect();
 
     return {
@@ -109,9 +109,9 @@ const Whiteboard = () => {
     e: React.PointerEvent<HTMLCanvasElement>,
   ) => {
     setDrawing(true);
-  
+
     const point = getPoint(e);
-  
+
     if (tool === "pencil") {
       setCurrentElement({
         id: crypto.randomUUID(),
@@ -123,7 +123,7 @@ const Whiteboard = () => {
     }
   };
 
-// ====================================
+  // ====================================
   // const emitCursor = throttle((x: number, y: number) => {
   //   socket.emit("cursor-move", {
   //     roomId,
@@ -132,7 +132,7 @@ const Whiteboard = () => {
   //     color,
   //   });
   // }, 20);
-// ====================================
+  // ====================================
 
   // const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
   //   const point = getPoint(e);
@@ -153,9 +153,9 @@ const Whiteboard = () => {
     e: React.PointerEvent<HTMLCanvasElement>,
   ) => {
     const point = getPoint(e);
-  
+
     if (!drawing || !currentElement) return;
-  
+
     if (currentElement.type === "stroke") {
       setCurrentElement({
         ...currentElement,
@@ -181,16 +181,16 @@ const Whiteboard = () => {
 
   const handlePointerUp = () => {
     if (!currentElement) return;
-  
+
     addElement(currentElement);
-  
+
     socket.emit("draw", {
       roomId,
       element: currentElement,
     });
-  
+
     setCurrentElement(null);
-  
+
     setDrawing(false);
   };
 
@@ -210,9 +210,9 @@ const Whiteboard = () => {
       // onMouseMove={handleMouseMove}
       // onMouseUp={handleMouseUp}
       onPointerDown={handlePointerDown}
-onPointerMove={handlePointerMove}
-onPointerUp={handlePointerUp}
-onPointerLeave={handlePointerUp}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerUp}
     />
   );
 };
