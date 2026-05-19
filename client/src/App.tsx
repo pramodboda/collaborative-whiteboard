@@ -3,6 +3,7 @@
 // import viteLogo from "./assets/vite.svg";
 // import heroImg from "./assets/hero.png";
 
+import Hero from "./components/Hero";
 import Whiteboard from "./components/Whiteboard";
 import Toolbar from "./components/Toolbar";
 // import CursorLayer from "./components/CursorLayer";
@@ -17,13 +18,10 @@ function App() {
   return (
     <>
       <div>
-        <h2>A Real-Time Collaborative Whiteboard</h2>
         {/* <Toolbar onClear={handleClear} /> */}
-
+        <Hero />
         <Toolbar />
-
         {/* <CursorLayer /> */}
-
         <Whiteboard />
       </div>
     </>
