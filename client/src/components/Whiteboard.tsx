@@ -77,7 +77,10 @@ const Whiteboard = () => {
     }
   }, [elements, currentElement]);
 
-  const getPoint = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // const getPoint = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const getPoint = (
+      e: React.PointerEvent<HTMLCanvasElement>,
+    ) => {
     const rect = canvasRef.current!.getBoundingClientRect();
 
     return {
@@ -86,11 +89,29 @@ const Whiteboard = () => {
     };
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  //   setDrawing(true);
+
+  //   const point = getPoint(e);
+
+  //   if (tool === "pencil") {
+  //     setCurrentElement({
+  //       id: crypto.randomUUID(),
+  //       type: "stroke",
+  //       points: [point],
+  //       color,
+  //       size,
+  //     });
+  //   }
+  // };
+
+  const handlePointerDown = (
+    e: React.PointerEvent<HTMLCanvasElement>,
+  ) => {
     setDrawing(true);
-
+  
     const point = getPoint(e);
-
+  
     if (tool === "pencil") {
       setCurrentElement({
         id: crypto.randomUUID(),
@@ -102,6 +123,7 @@ const Whiteboard = () => {
     }
   };
 
+// ====================================
   // const emitCursor = throttle((x: number, y: number) => {
   //   socket.emit("cursor-move", {
   //     roomId,
@@ -110,14 +132,30 @@ const Whiteboard = () => {
   //     color,
   //   });
   // }, 20);
+// ====================================
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  //   const point = getPoint(e);
+
+  //   // emitCursor(point.x, point.y);
+
+  //   if (!drawing || !currentElement) return;
+
+  //   if (currentElement.type === "stroke") {
+  //     setCurrentElement({
+  //       ...currentElement,
+  //       points: [...currentElement.points, point],
+  //     } as Stroke);
+  //   }
+  // };
+
+  const handlePointerMove = (
+    e: React.PointerEvent<HTMLCanvasElement>,
+  ) => {
     const point = getPoint(e);
-
-    // emitCursor(point.x, point.y);
-
+  
     if (!drawing || !currentElement) return;
-
+  
     if (currentElement.type === "stroke") {
       setCurrentElement({
         ...currentElement,
@@ -126,18 +164,33 @@ const Whiteboard = () => {
     }
   };
 
-  const handleMouseUp = () => {
+  // const handleMouseUp = () => {
+  //   if (!currentElement) return;
+
+  //   addElement(currentElement);
+
+  //   socket.emit("draw", {
+  //     roomId,
+  //     element: currentElement,
+  //   });
+
+  //   setCurrentElement(null);
+
+  //   setDrawing(false);
+  // };
+
+  const handlePointerUp = () => {
     if (!currentElement) return;
-
+  
     addElement(currentElement);
-
+  
     socket.emit("draw", {
       roomId,
       element: currentElement,
     });
-
+  
     setCurrentElement(null);
-
+  
     setDrawing(false);
   };
 
@@ -149,9 +202,13 @@ const Whiteboard = () => {
       style={{
         background: "#f8f8f8",
       }}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
+      // onMouseDown={handleMouseDown}
+      // onMouseMove={handleMouseMove}
+      // onMouseUp={handleMouseUp}
+      onPointerDown={handlePointerDown}
+onPointerMove={handlePointerMove}
+onPointerUp={handlePointerUp}
+onPointerLeave={handlePointerUp}
     />
   );
 };
