@@ -1,4 +1,5 @@
 import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
 export default function Hero() {
   return (
@@ -15,7 +16,13 @@ export default function Hero() {
           <li>Open the whiteboard application.</li>
           <li>Draw something on the canvas using the pen tool.</li>
           <li>
-            Open the same URL:
+            Open the same URL:{" "}
+            <Link
+              href="https://collaborative-whiteboard-nu.vercel.app/"
+              target="_blank"
+            >
+              Collaborative Whiteboard
+            </Link>
             <ul>
               <li>in a new browser tab</li>
               <li>in another browser</li>
