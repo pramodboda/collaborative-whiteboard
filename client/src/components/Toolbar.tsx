@@ -1,5 +1,5 @@
 // Toolbar.tsx
-
+import { useState } from "react";
 import { socket } from "../hooks/useSocket";
 import { useBoardStore } from "../store/boardStore";
 
@@ -27,6 +27,8 @@ const roomId = "room-1";
 // }
 
 const Toolbar = () => {
+
+
   const {
     color,
     size,
@@ -38,6 +40,9 @@ const Toolbar = () => {
     redo,
     clearBoard,
   } = useBoardStore();
+
+
+  const [penToolsOpen, setPenToolsOpen] = useState(false)
 
   const handleUndo = () => {
     const removed = undo();
@@ -68,7 +73,62 @@ const Toolbar = () => {
 
   return (
     <div>
-      <div
+
+      {penToolsOpen ??
+        <Box>
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: 2,
+              overflow: "hidden",
+              border: "2px solid #d1d5db",
+              cursor: "pointer",
+              position: "relative",
+            }}
+          >
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "none",
+                padding: 0,
+                background: "none",
+                cursor: "pointer",
+              }}
+            />
+          </Box>
+          <IconButton component="label">
+            <PaletteIcon sx={{ color: color }} />
+
+            <input
+              hidden
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            />
+          </IconButton>
+
+          <Slider
+            aria-label="Brush Size"
+            value={size}
+            valueLabelDisplay="auto"
+            min={1}
+            max={20}
+            step={1}
+            sx={{ width: 120 }}
+            onChange={(_, value) => setSize(value as number)}
+          />
+        </Box>
+
+      }
+
+
+
+      <Box
         style={{
           display: "flex",
           gap: 10,
@@ -103,99 +163,53 @@ const Toolbar = () => {
           onChange={(e) => setSize(Number(e.target.value))}
         /> */}
 
-        <Box
-          sx={{
-            width: 40,
-            height: 40,
-            borderRadius: 2,
-            overflow: "hidden",
-            border: "2px solid #d1d5db",
-            cursor: "pointer",
-            position: "relative",
-          }}
-        >
-          <input
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "none",
-              padding: 0,
-              background: "none",
-              cursor: "pointer",
-            }}
-          />
-        </Box>
-
-        <IconButton component="label">
-          <PaletteIcon sx={{ color: color }} />
-
-          <input
-            hidden
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
-        </IconButton>
-
-        <Slider
-          aria-label="Brush Size"
-          value={size}
-          valueLabelDisplay="auto"
-          min={1}
-          max={20}
-          step={1}
-          sx={{ width: 120 }}
-          onChange={(_, value) => setSize(value as number)}
-        />
 
         {/* <button onClick={handleUndo}>Undo</button> */}
         {/* <button onClick={handleRedo}>Redo</button> */}
         {/* <button onClick={handleClearBoard}>Clear</button> */}
 
         <div>{tool}</div>
-      </div>
-      <ButtonGroup>
+        <ButtonGroup>
+          <Button
+            aria-label="pen"
+            onClick={() => setTool("pencil")}
+            startIcon={<BsPen style={{ fontSize: "1rem", fontWeight: "bold" }} />}
+          >
+            {/* Pen */}
+          </Button>
+          <Button aria-label="rectangle" onClick={() => setTool("rectangle")}>
+            {/* <IoSquareOutline fontSize="1.2rem" /> */}
+            <FaRegSquare fontSize="1.05rem" />
+          </Button>
+
+          <Button aria-label="circle" onClick={() => setTool("circle")}>
+            {/* <GoCircle fontSize="1.1rem" /> */}
+            <FaRegCircle fontSize="1rem" />
+          </Button>
+
+          <Button aria-label="line" onClick={() => setTool("line")}>
+            {/* Line */}
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button aria-label="undo" onClick={handleUndo} startIcon={<LuUndo />}>
+            {/* Undo */}
+          </Button>
+          <Button aria-label="redo" onClick={handleRedo} startIcon={<LuRedo />}>
+            {/* Redo */}
+          </Button>
+        </ButtonGroup>
         <Button
-          aria-label="pen"
-          onClick={() => setTool("pencil")}
-          startIcon={<BsPen style={{ fontSize: "1rem", fontWeight: "bold" }} />}
+          variant="outlined"
+          color="error"
+          aria-label="clear-board"
+          onClick={handleClearBoard}
+          startIcon={<MdOutlineCleaningServices />}
         >
-          Pen
+          {/* Clear */}
         </Button>
-        <Button aria-label="rectangle" onClick={() => setTool("rectangle")}>
-          {/* <IoSquareOutline fontSize="1.2rem" /> */}
-          <FaRegSquare fontSize="1.05rem" />
-        </Button>
+      </Box>
 
-        <Button aria-label="circle" onClick={() => setTool("circle")}>
-          {/* <GoCircle fontSize="1.1rem" /> */}
-          <FaRegCircle fontSize="1rem" />
-        </Button>
-
-        <Button aria-label="line" onClick={() => setTool("line")}>
-          Line
-        </Button>
-      </ButtonGroup>
-      <ButtonGroup>
-        <Button aria-label="undo" onClick={handleUndo} startIcon={<LuUndo />}>
-          Undo
-        </Button>
-        <Button aria-label="redo" onClick={handleRedo} startIcon={<LuRedo />}>
-          Redo
-        </Button>
-      </ButtonGroup>
-      <Button
-        variant="outlined"
-        color="error"
-        aria-label="clear-board"
-        onClick={handleClearBoard}
-        startIcon={<MdOutlineCleaningServices />}
-      >
-        Clear
-      </Button>
     </div>
   );
 };
