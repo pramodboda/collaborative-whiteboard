@@ -147,7 +147,7 @@ const Toolbar = () => {
           background: "white",
           zIndex: 1000,
           ...liquidGlassStyle
-          
+
         }}
       >
         {/* 
@@ -180,39 +180,65 @@ const Toolbar = () => {
 
         {/* <div>{tool}</div> */}
         <ButtonGroup
-        // sx={{
-        //   '& .MuiButtonGroup-grouped': {
-        //     minWidth: 40,
-        //     width: 40,
-        //     padding: 0,
-        //   },
-        // }}
-        sx={{
-          "& .MuiButtonGroup-grouped": {
-            minWidth: 40,
-            width: 40,
-            p: 0,
-      
-            border: "none",
-      
-            // color: "rgba(0,0,0,0.8)",
-      
-            background: "transparent",
-      
-            "&:hover": {
-              background: "rgba(255,255,255,0.15)",
+          // sx={{
+          //   '& .MuiButtonGroup-grouped': {
+          //     minWidth: 40,
+          //     width: 40,
+          //     padding: 0,
+          //   },
+          // }}
+          sx={{
+            "& .MuiButtonGroup-grouped": {
+              minWidth: 40,
+              width: 40,
+              p: 0,
+
+              border: "none",
+
+              // color: "rgba(0,0,0,0.8)",
+
+              background: "transparent",
+
+              "&:hover": {
+                background: "rgba(255,255,255,0.15)",
+              },
             },
-          },
-        }}
+          }}
         >
           <Button
             aria-label="pen"
+            className={tool === "pen" ? "active" : ""}
             onClick={() => setTool("pen")}
             color="pramodMUI"
+            // sx={{
+            //   borderRadius: "14px",
+
+            //   "&.active": {
+            //     background: "rgba(255,255,255,0.25)",
+
+            //     boxShadow: `
+            //       inset 0 1px 0 rgba(255,255,255,0.5),
+            //       0 4px 12px rgba(0,0,0,0.15)
+            //     `,
+            //   },
+            // }}
           >
             <LuPencil fontSize="1.15rem" />
           </Button>
-          <Button aria-label="rectangle" onClick={() => setTool("rectangle")} color="pramodMUI">
+          <Button aria-label="rectangle" className={tool === "rectangle" ? "active" : ""} onClick={() => setTool("rectangle")} color="pramodMUI"
+          // sx={{
+          //   borderRadius: "14px",
+
+          //   "&.active": {
+          //     background: "rgba(255,255,255,0.25)",
+
+          //     boxShadow: `
+          //         inset 0 1px 0 rgba(255,255,255,0.5),
+          //         0 4px 12px rgba(0,0,0,0.15)
+          //       `,
+          //   },
+          // }}
+          >
             {/* <IoSquareOutline fontSize="1.2rem" /> */}
             <FaRegSquare fontSize="1.05rem" />
           </Button>
@@ -246,9 +272,9 @@ const Toolbar = () => {
           color="error"
           aria-label="clear-board"
           onClick={handleClearBoard}
-          // sx={{ minWidth: 40,
-          //   width: 40,
-          //   padding: 0,}}
+        // sx={{ minWidth: 40,
+        //   width: 40,
+        //   padding: 0,}}
         >
           <MdOutlineCleaningServices fontSize="1.2rem" />
         </Button>
