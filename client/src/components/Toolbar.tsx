@@ -3,19 +3,27 @@ import { useState } from "react";
 import { socket } from "../hooks/useSocket";
 import { useBoardStore } from "../store/boardStore";
 
+
+import liquidGlassStyle from "../theme/liquidGlassStyle"
+
 import Box from "@mui/material/Box";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import IconButton from "@mui/material/IconButton";
 
+
+
+
 import PaletteIcon from "@mui/icons-material/Palette";
 // import { IoSquareOutline } from "react-icons/io5";
+
 
 // import { GoCircle } from "react-icons/go";
 import { FaRegSquare } from "react-icons/fa6";
 import { FaRegCircle } from "react-icons/fa6";
-import { BsPen } from "react-icons/bs";
+import { LuPencil } from "react-icons/lu";
+import { TfiLayoutLineSolid } from "react-icons/tfi";
 import { LuUndo } from "react-icons/lu";
 import { LuRedo } from "react-icons/lu";
 import { MdOutlineCleaningServices } from "react-icons/md";
@@ -138,6 +146,8 @@ const Toolbar = () => {
           left: 10,
           background: "white",
           zIndex: 1000,
+          ...liquidGlassStyle
+          
         }}
       >
         {/* 
@@ -168,35 +178,67 @@ const Toolbar = () => {
         {/* <button onClick={handleRedo}>Redo</button> */}
         {/* <button onClick={handleClearBoard}>Clear</button> */}
 
-        <div>{tool}</div>
-        <ButtonGroup>
+        {/* <div>{tool}</div> */}
+        <ButtonGroup
+        // sx={{
+        //   '& .MuiButtonGroup-grouped': {
+        //     minWidth: 40,
+        //     width: 40,
+        //     padding: 0,
+        //   },
+        // }}
+        sx={{
+          "& .MuiButtonGroup-grouped": {
+            minWidth: 40,
+            width: 40,
+            p: 0,
+      
+            border: "none",
+      
+            // color: "rgba(0,0,0,0.8)",
+      
+            background: "transparent",
+      
+            "&:hover": {
+              background: "rgba(255,255,255,0.15)",
+            },
+          },
+        }}
+        >
           <Button
             aria-label="pen"
-            onClick={() => setTool("pencil")}
-            startIcon={<BsPen style={{ fontSize: "1rem", fontWeight: "bold" }} />}
+            onClick={() => setTool("pen")}
+            color="pramodMUI"
           >
-            {/* Pen */}
+            <LuPencil fontSize="1.15rem" />
           </Button>
-          <Button aria-label="rectangle" onClick={() => setTool("rectangle")}>
+          <Button aria-label="rectangle" onClick={() => setTool("rectangle")} color="pramodMUI">
             {/* <IoSquareOutline fontSize="1.2rem" /> */}
             <FaRegSquare fontSize="1.05rem" />
           </Button>
 
-          <Button aria-label="circle" onClick={() => setTool("circle")}>
+          <Button aria-label="circle" onClick={() => setTool("circle")} color="pramodMUI">
             {/* <GoCircle fontSize="1.1rem" /> */}
             <FaRegCircle fontSize="1rem" />
           </Button>
 
-          <Button aria-label="line" onClick={() => setTool("line")}>
-            {/* Line */}
+          <Button aria-label="line" onClick={() => setTool("line")} color="pramodMUI">
+
+            <TfiLayoutLineSolid fontSize="1rem" />
           </Button>
         </ButtonGroup>
-        <ButtonGroup>
-          <Button aria-label="undo" onClick={handleUndo} startIcon={<LuUndo />}>
-            {/* Undo */}
+        <ButtonGroup sx={{
+          '& .MuiButtonGroup-grouped': {
+            minWidth: 40,
+            width: 40,
+            padding: 0,
+          },
+        }}>
+          <Button aria-label="undo" onClick={handleUndo} color="pramodMUI">
+            <LuUndo fontSize="1.2rem" />
           </Button>
-          <Button aria-label="redo" onClick={handleRedo} startIcon={<LuRedo />}>
-            {/* Redo */}
+          <Button aria-label="redo" onClick={handleRedo} color="pramodMUI">
+            <LuRedo fontSize="1.2rem" />
           </Button>
         </ButtonGroup>
         <Button
@@ -204,9 +246,11 @@ const Toolbar = () => {
           color="error"
           aria-label="clear-board"
           onClick={handleClearBoard}
-          startIcon={<MdOutlineCleaningServices />}
+          // sx={{ minWidth: 40,
+          //   width: 40,
+          //   padding: 0,}}
         >
-          {/* Clear */}
+          <MdOutlineCleaningServices fontSize="1.2rem" />
         </Button>
       </Box>
 

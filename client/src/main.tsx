@@ -3,8 +3,16 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from './theme/theme';
+
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  
+    <StrictMode>
+      <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+      </ThemeProvider>
+    </StrictMode>
+  ,
 )
